@@ -11,18 +11,21 @@ const signToken = (id) => {
 
 // Create new user
 exports.superAdminRegister = catchAsync(async (req, res, next) => {
-  const userName = req.body.userName;
-  const UserEmail = req.body.UserEmail;
+  const name = req.body.name;
+  const email = req.body.email;
   const password = req.body.password;
   const passwordConfirm = req.body.passwordConfirm;
 
+  console.log("backen step-1");
+
   const newUser = await Users.create({
-    userName,
-    UserEmail,
+    name,
+    email,
     password,
     role: "super-admin",
   });
 
+  console.log("backend step-2");
   res.status(200).json({
     status: "Success",
     message: "Super Admin Register sucessfully",
@@ -32,14 +35,15 @@ exports.superAdminRegister = catchAsync(async (req, res, next) => {
 
 // Login Super-Admin
 exports.loginSuperAdmin = catchAsync(async (req, res, next) => {
-  const { UserEmail, password } = req.body;
+  const { email, password } = req.body;
+  console.log(email, password);
 
   // 1) Check E-mail and password is exist
-  if (!UserEmail || !password) {
+  if (!email || !password) {
     return next(new APPError("please provide E-mail and Password "));
   }
   // 2) check user is exist in
-  const user = await Users.findOne({ UserEmail }).select("+password");
+  const user = await Users.findOne({ email }).select("+password");
   // 3) Password Verification
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(
@@ -51,6 +55,7 @@ exports.loginSuperAdmin = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "Success",
     message: "Super Admin Login sucessfully",
+    apiFor: "Login",
     token,
     user,
   });
@@ -253,7 +258,6 @@ exports.protect = catchAsync(async (req, res, next) => {
 
 // all to acces user Role
 exports.restricTO = (...roles) => {
-  console.log(roles);
   return (req, res, next) => {
     // roles in Array
     if (!roles.includes(req.user.role)) {
