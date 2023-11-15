@@ -114,3 +114,65 @@ exports.upcomingProjects = catchAsync(async (req, res, next) => {
     project,
   });
 });
+
+exports.toggleFeatureProject = catchAsync(async (req, res, next) => {
+  const { _id } = req.body;
+  const project = await Project.findById(_id);
+
+  if (!project) {
+    return res.status(404).json({
+      status: "Error",
+      message: "Project not found",
+    });
+  }
+
+  // Toggle the status
+  project.Featured = !project.Featured;
+  await project.save();
+
+  return res.status(200).json({
+    status: "Success",
+    message: "Feature Project Status Update Succesfully",
+    project,
+  });
+});
+
+// Toogle project Status
+exports.toggleProjectStatus = catchAsync(async (req, res, next) => {
+  console.log(req.body);
+  const { _id } = req.body;
+
+  const project = await Project.findById(_id);
+
+  if (!project) {
+    return res.status(404).json({
+      status: "Error",
+      message: "Project not found",
+    });
+  }
+
+  // Toggle the status
+  project.status = !project.status;
+  await project.save();
+
+  return res.status(200).json({
+    status: "Success",
+    message: "Project Status Update Succesfully",
+    project,
+  });
+});
+
+exports.ProjectStatusType = catchAsync(async (req, res, next) => {
+  console.log(req.body);
+  const { _id, optionValue } = req.body;
+
+  const project = await Project.findByIdAndUpdate(_id, {
+    ProjectStatus: optionValue,
+  });
+
+  return res.status(200).json({
+    status: "Success",
+    message: "Project Status Update Succesfully",
+    project,
+  });
+});

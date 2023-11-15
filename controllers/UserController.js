@@ -16,8 +16,6 @@ exports.superAdminRegister = catchAsync(async (req, res, next) => {
   const password = req.body.password;
   const passwordConfirm = req.body.passwordConfirm;
 
-  console.log("backen step-1");
-
   const newUser = await Users.create({
     name,
     email,
@@ -25,7 +23,6 @@ exports.superAdminRegister = catchAsync(async (req, res, next) => {
     role: "super-admin",
   });
 
-  console.log("backend step-2");
   res.status(200).json({
     status: "Success",
     message: "Super Admin Register sucessfully",
@@ -36,7 +33,6 @@ exports.superAdminRegister = catchAsync(async (req, res, next) => {
 // Login Super-Admin
 exports.loginSuperAdmin = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
-  console.log(email, password);
 
   // 1) Check E-mail and password is exist
   if (!email || !password) {
@@ -236,7 +232,6 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // 2) Verification token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  console.log(decoded);
 
   // 3) check user still exist
   const fresUser = await Users.findById(decoded.id);

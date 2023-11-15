@@ -15,9 +15,15 @@ const projectSchema = new mongoose.Schema(
     },
 
     Featured: {
-      type: String,
-      enum: ["yes", "no"],
-      default: "yes",
+      type: Boolean,
+      enum: [false, true],
+      default: false,
+    },
+
+    status: {
+      type: Boolean,
+      enum: [false, true],
+      default: true,
     },
 
     ProjectType1: {

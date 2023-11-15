@@ -17,4 +17,11 @@ router.post(
 );
 router.delete("/delete-single-project", ProjectController.deleteSinglProject);
 router.post("/update-upcoming-project", ProjectController.upcomingProjects);
+router.patch("/update-feature-project", ProjectController.toggleFeatureProject);
+router.patch("/update-project-status", ProjectController.toggleProjectStatus);
+router.patch(
+  "/update-project-status-type",
+  ProjectController.ProjectStatusType
+);
+
 module.exports = router;
