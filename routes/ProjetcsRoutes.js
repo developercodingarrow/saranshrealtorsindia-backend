@@ -16,12 +16,22 @@ router.post(
   ProjectController.createNewProject
 );
 router.delete("/delete-single-project", ProjectController.deleteSinglProject);
+router.delete(
+  "/delete-multiple-project",
+  ProjectController.deleteMultipleProjects
+);
 router.post("/update-upcoming-project", ProjectController.upcomingProjects);
 router.patch("/update-feature-project", ProjectController.toggleFeatureProject);
 router.patch("/update-project-status", ProjectController.toggleProjectStatus);
 router.patch(
   "/update-project-status-type",
   ProjectController.ProjectStatusType
+);
+router.get("/get-single-project/:_id", ProjectController.getSingleProject);
+router.patch(
+  "/update-project-thumblin/:id",
+  ProjectController.ProjectThumblinImage,
+  ProjectController.updateThumblinIMage
 );
 
 module.exports = router;

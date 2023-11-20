@@ -8,6 +8,7 @@ const BlogRoutes = require("./routes/BlogRoutes");
 const promotionalRoutes = require("./routes/PromotionalRoutes");
 const EnquireyFormRoutes = require("./routes/EnquiryFormRoutes");
 const UserRoute = require("./routes/UsersRoute");
+const DeveloperRoute = require("./routes/DeveloperRoutes");
 const cors = require("cors");
 
 // Midelwears
@@ -20,6 +21,7 @@ app.use("/blogs", BlogRoutes);
 app.use("/promotional", promotionalRoutes);
 app.use("/enquirey", EnquireyFormRoutes);
 app.use("/user", UserRoute);
+app.use("/developer", DeveloperRoute);
 
 app.all("*", (req, res, next) => {
   next(new AppError("this is error message ", 404));

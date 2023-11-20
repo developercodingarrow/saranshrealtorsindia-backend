@@ -52,8 +52,6 @@ exports.createNewProject = catchAsync(async (req, res, next) => {
     FlatSizeRange,
   } = req.body;
 
-  console.log("test-1");
-
   let thumblin;
 
   if (!req.file?.filename) {
@@ -62,7 +60,6 @@ exports.createNewProject = catchAsync(async (req, res, next) => {
     thumblin = req.file.filename;
   }
 
-  console.log(thumblin);
   const newProject = new Project({
     projectName,
     ProjectSector,
@@ -81,13 +78,58 @@ exports.createNewProject = catchAsync(async (req, res, next) => {
   resultStatus(res, 200, "created new projects", saveProject);
 });
 
-// Delete Single Blog
-exports.deleteSinglProject = catchAsync(async (req, res, next) => {
-  const { id } = req.body;
+exports.updateThumblinIMage = catchAsync(async (req, res, next) => {
+  console.log("run-1");
+  const { id } = req.params;
+  console.log(id);
+  console.log("run-2");
+  const thumblin = req.file.filename;
+  console.log(thumblin);
+  console.log("run-3");
+  const upadteThumblin = await Project.findByIdAndUpdate(
+    id,
+    {
+      ProjectThumblin: {
+        url: thumblin,
+        altText: "update-new-image",
+      },
+    },
+    { new: true }
+  );
 
-  const deleteProject = await Project.findByIdAndDelete(id);
+  return res.status(200).json({
+    status: "Success",
+    message: "Project Thumblin Update Succesfully",
+    upadteThumblin,
+  });
+});
+
+// Delete Single Project
+exports.deleteSinglProject = catchAsync(async (req, res, next) => {
+  const { _id } = req.body;
+
+  const deleteProject = await Project.findByIdAndDelete(_id);
 
   resultStatus(res, 404, "delete project sucesfully", deleteProject);
+});
+
+// DELETE MULTIPLE PROJECTS
+exports.deleteMultipleProjects = catchAsync(async (req, res, next) => {
+  const { projectIds } = req.body; // Assuming an array of projectIds is sent in the request body
+  // Handle deletion of multiple projects
+  const deleteProjects = await Project.deleteMany({ _id: { $in: projectIds } });
+  // Check if any projects were deleted
+  if (deleteProjects.deletedCount > 0) {
+    return res.status(200).json({
+      status: "Success",
+      message: `${deleteProjects.deletedCount} projects deleted successfully.`,
+    });
+  } else {
+    return res.status(404).json({
+      status: "Error",
+      message: "No projects were deleted.",
+    });
+  }
 });
 
 // Upadte project as upcoming Project
@@ -169,6 +211,25 @@ exports.ProjectStatusType = catchAsync(async (req, res, next) => {
   const project = await Project.findByIdAndUpdate(_id, {
     ProjectStatus: optionValue,
   });
+
+  return res.status(200).json({
+    status: "Success",
+    message: "Project Status Update Succesfully",
+    project,
+  });
+});
+
+exports.getSingleProject = catchAsync(async (req, res, next) => {
+  const { _id } = req.params;
+
+  const project = await Project.findById(_id);
+
+  if (!project) {
+    return res.status(404).json({
+      status: "Error",
+      message: "Project not found",
+    });
+  }
 
   return res.status(200).json({
     status: "Success",
