@@ -59,15 +59,17 @@ exports.loginSuperAdmin = catchAsync(async (req, res, next) => {
 
 // Create New Admin
 exports.createAdmin = catchAsync(async (req, res, next) => {
-  const userName = req.body.userName;
-  const UserEmail = req.body.UserEmail;
+  const name = req.body.name;
+  const email = req.body.email;
   const password = req.body.password;
-  const passwordConfirm = req.body.passwordConfirm;
+  const passwordConfirm = req.body.password;
+  const userName = req.body.userName;
 
   const newUser = await Users.create({
-    userName,
-    UserEmail,
+    name,
+    email,
     password,
+    userName,
     role: "admin",
   });
 
@@ -145,40 +147,19 @@ exports.deleteMultipleAdmins = catchAsync(async (req, res, next) => {
 
 // ACite or Deactive admins
 exports.adminStatusAction = catchAsync(async (req, res, next) => {
-  const { _id, action } = req.body;
-  // Ensure 'action' is either 'activate' or 'deactivate'
-  if (action !== "activate" && action !== "deactivate") {
-    return res.status(400).json({
-      status: "Error",
-      message:
-        'Invalid action. It should be either "activate" or "deactivate".',
-    });
-  }
+  const { _id } = req.body;
 
   // If user have super admin
-  const checrole = await Users.findById(_id);
+  const user = await Users.findById(_id);
 
-  if (checrole.role === "super-admin") {
+  if (user.role === "super-admin") {
     return next(
       new AppError("only upadte the status of admins not super admin")
     );
   }
-
-  // Use updateOne to update the user's userStatus
-  const user = await Users.findByIdAndUpdate(
-    { _id, role: "admin" },
-    { $set: { userStatus: action } },
-    {
-      new: true,
-    }
-  );
-  // If user not found
-  if (user.nModified === 0) {
-    return res.status(404).json({
-      status: "Error",
-      message: "User not found",
-    });
-  }
+  // Toggle the status
+  user.userStatus = !user.userStatus;
+  await user.save();
 
   res.status(200).json({
     status: "Success",

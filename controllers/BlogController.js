@@ -7,7 +7,7 @@ const path = require("path");
 
 const multerstorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.resolve(`${__dirname}./../public/blog-images`));
+    cb(null, path.resolve(`${__dirname}/../../client/public/blog-images`));
   },
   filename: function (req, file, cb) {
     const ext = file.mimetype.split("/")[1];
@@ -39,6 +39,7 @@ exports.allBlogs = catchAsync(async (req, res) => {
 // Create new Blog
 exports.createNewBlog = catchAsync(async (req, res) => {
   const { blogTitle, blogDescreption } = req.body;
+  console.log(req.body);
   const image = req.file.filename;
 
   const newBlog = new Blog({
@@ -46,9 +47,8 @@ exports.createNewBlog = catchAsync(async (req, res) => {
     blogDescreption,
 
     image: {
-      data: image, // Binary image data
-      contentType: req.file.mimetype, // Image content type (e.g., image/jpeg, image/png)
-      altText: "image-alt-text",
+      url: image,
+      altText: "Blog-image",
     },
   });
 

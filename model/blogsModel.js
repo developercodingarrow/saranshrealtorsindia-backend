@@ -19,11 +19,16 @@ const blogSchema = new mongoose.Schema({
   },
 
   // Image field to store the image data
-  image: {
-    data: Buffer, // Binary image data
-    contentType: String, // Image content type (e.g., image/jpeg, image/png)
-    altText: String,
-  },
+  image: [
+    {
+      url: {
+        type: String,
+      },
+      altText: {
+        type: String,
+      },
+    },
+  ],
 });
 
 // slug the pormotional page Title
