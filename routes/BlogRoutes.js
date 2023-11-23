@@ -5,7 +5,7 @@ const UserController = require("../controllers/UserController");
 
 // All Project Route
 router.get("/", BlogController.allBlogs);
-router.get("/single-blog/:blogTitle", BlogController.singleBlog);
+router.get("/single-blog/:slug", BlogController.singleBlog);
 
 router.use(
   UserController.protect,

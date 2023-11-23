@@ -59,6 +59,7 @@ exports.createNewBlog = catchAsync(async (req, res) => {
 
 exports.singleBlog = catchAsync(async (req, res, next) => {
   const { slug } = req.params;
+  console.log(slug);
 
   const blog = await Blog.findOne({ slug });
 
