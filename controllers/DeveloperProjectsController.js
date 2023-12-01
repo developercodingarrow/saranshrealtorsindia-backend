@@ -1,4 +1,5 @@
 const DeveloperProjects = require("../model/developerProjectModel");
+const LocationProjects = require("../model/locationProjectsModel");
 const Project = require("../model/projectsModel");
 const catchAsync = require("../utils/catchAsync");
 
@@ -38,14 +39,12 @@ exports.allDeveloperProjectList = catchAsync(async (req, res, next) => {
     resultStatus(res, 200, "all Developer pages", DeveloperPage);
   });
 
-
 // GET PROJECTS BY DEVELOPERS  
 exports.developerProjectPage = catchAsync(async (req, res, next)=>{
     const { slug } = req.params;
     console.log(slug)
     // GET Project By Developer Title
     const getdeveloper = await DeveloperProjects.findOne({slug});
-    console.log(getdeveloper)
 
     const projects = await Project.find({
         developer: getdeveloper.developer,
@@ -56,4 +55,49 @@ exports.developerProjectPage = catchAsync(async (req, res, next)=>{
         status: "Success",
         projects,
       });
-})  
+}) 
+
+
+// Projects by Loaction
+exports.createLocationProjectPage = catchAsync(async (req,res,next)=>{
+  const { pageTitle, ProjectCity, topDescription, bottomDescription } =
+  req.body;
+
+const newLocationProjectPage = new LocationProjects({
+  pageTitle,
+  ProjectCity,
+  topDescription,
+  bottomDescription,
+});
+const saveNewLocationProject = await newLocationProjectPage.save();
+resultStatus(
+  res,
+  201,
+  "created new Location Project page",
+  saveNewLocationProject
+);
+})
+
+// Get All Location Project Page
+exports.allLocationProjectList = catchAsync(async (req, res, next) => {
+  const LocationPage = await LocationProjects.find();
+  resultStatus(res, 200, "all Developer pages", LocationPage);
+});
+
+// GET PROJECTS BY Location  
+exports.locationProjectPage = catchAsync(async (req, res, next)=>{
+  const { slug } = req.params;
+  console.log(slug)
+  // GET Project By Location 
+  const getdeveloper = await LocationProjects.findOne({slug});
+
+  const projects = await Project.find({
+    ProjectCity: getdeveloper.ProjectCity,
+    });
+
+    res.status(200).json({
+      developer: getdeveloper.ProjectCity,
+      status: "Success",
+      projects,
+    });
+}) 
