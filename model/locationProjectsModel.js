@@ -36,7 +36,7 @@ locationProjectSchema.pre("save", function (next) {
 });
 
 const LocationProjects = mongoose.model(
-  "DeveloperProjects",
+  "locationProjects",
   locationProjectSchema
 );
 
