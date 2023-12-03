@@ -220,9 +220,9 @@ exports.ProjectStatusType = catchAsync(async (req, res, next) => {
 });
 
 exports.getSingleProject = catchAsync(async (req, res, next) => {
-  const { _id } = req.params;
+  const { slug } = req.params;
 
-  const project = await Project.findById(_id);
+  const project = await Project.findOne(slug);
 
   if (!project) {
     return res.status(404).json({

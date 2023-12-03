@@ -5,6 +5,7 @@ const UserController = require("../controllers/UserController");
 
 // All Project Route
 router.get("/", ProjectController.allProjects);
+router.get("/get-single-project/:_id", ProjectController.getSingleProject);
 
 router.use(
   UserController.protect,
@@ -27,7 +28,7 @@ router.patch(
   "/update-project-status-type",
   ProjectController.ProjectStatusType
 );
-router.get("/get-single-project/:_id", ProjectController.getSingleProject);
+
 router.patch(
   "/update-project-thumblin/:id",
   ProjectController.ProjectThumblinImage,

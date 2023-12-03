@@ -10,7 +10,7 @@ const EnquireyFormRoutes = require("./routes/EnquiryFormRoutes");
 const UserRoute = require("./routes/UsersRoute");
 const DeveloperRoute = require("./routes/DeveloperRoutes");
 const DeveloperProjectRoute = require("./routes/DevloperProjectRoutes");
-const LocationProjectRoute = require("./routes/LocationProjectRoutes")
+const LocationProjectRoute = require("./routes/LocationProjectRoutes");
 const cors = require("cors");
 
 // Midelwears
