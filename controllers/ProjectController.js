@@ -35,7 +35,23 @@ const resultStatus = (res, statusCode, msg, result) => {
 
 // All Property Projects
 exports.allProjects = catchAsync(async (req, res, next) => {
-  const properties = await Project.find();
+  const { search } = req.query;
+  const decodedSearch = decodeURIComponent(search);
+  console.log(decodedSearch);
+  let properties;
+  if (search) {
+    // If a search query is provided, perform the search
+    properties = await Project.find({
+      $or: [
+        { projectName: { $regex: decodedSearch, $options: "i" } },
+        { ProjectCity: { $regex: decodedSearch, $options: "i" } },
+        { ProjectSector: { $regex: decodedSearch, $options: "i" } },
+      ],
+    });
+  } else {
+    // If no search query, fetch all projects
+    properties = await Project.find();
+  }
   resultStatus(res, 200, "fetch all projects", properties);
 });
 
