@@ -123,7 +123,7 @@ exports.updateThumblinIMage = catchAsync(async (req, res, next) => {
 // Delete Single Project
 exports.deleteSinglProject = catchAsync(async (req, res, next) => {
   const { _id } = req.body;
-
+  console.log(_id);
   const deleteProject = await Project.findByIdAndDelete(_id);
 
   resultStatus(res, 404, "delete project sucesfully", deleteProject);

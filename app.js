@@ -12,6 +12,7 @@ const DeveloperRoute = require("./routes/DeveloperRoutes");
 const DeveloperProjectRoute = require("./routes/DevloperProjectRoutes");
 const LocationProjectRoute = require("./routes/LocationProjectRoutes");
 const CityRoute = require("./routes/CityRoutes");
+const LocationRoute = require("./routes/LocationRoute");
 const cors = require("cors");
 
 // Midelwears
@@ -28,6 +29,7 @@ app.use("/developer", DeveloperRoute);
 app.use("/developer-project", DeveloperProjectRoute);
 app.use("/location-project", LocationProjectRoute);
 app.use("/city", CityRoute);
+app.use("/location", LocationRoute);
 
 app.all("*", (req, res, next) => {
   next(new AppError("this is error message ", 404));
