@@ -82,7 +82,7 @@ exports.createAdmin = catchAsync(async (req, res, next) => {
 
 // List of all admins - only Super Admin
 exports.getAllAdmins = catchAsync(async (req, res, next) => {
-  const allAdmins = await Users.find();
+  const allAdmins = await Users.find({ role: "admin" });
 
   res.status(200).json({
     status: "Success",
@@ -94,6 +94,7 @@ exports.getAllAdmins = catchAsync(async (req, res, next) => {
 // Delete only admins
 exports.deleteAdmins = catchAsync(async (req, res, next) => {
   const { _id } = req.body;
+  console.log(_id);
 
   const user = await Users.findById(_id);
 

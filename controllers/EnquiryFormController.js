@@ -32,3 +32,17 @@ exports.getAllEnquiry = catchAsync(async (req, res, next) => {
   const Enquries = await EnquiryForm.find();
   resultStatus(res, 200, "get all enquires", Enquries);
 });
+
+// Delete Enqures
+exports.deleteEnqure = catchAsync(async (req, res, next) => {
+  const { _id } = req.body;
+  console.log(_id);
+
+  const enqure = await EnquiryForm.findByIdAndDelete(_id);
+
+  res.status(200).json({
+    status: "Success",
+    message: "Enqure Delete Succesfully",
+    enqure,
+  });
+});

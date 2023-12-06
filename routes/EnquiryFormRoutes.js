@@ -7,4 +7,7 @@ router.post("/create-enquiry-project", EnquiryController.createEnquiry);
 
 router.get("/get-all-enquires", EnquiryController.getAllEnquiry);
 
+// DELETE SINGLE ADMIN
+router.delete("/delete-enqure", EnquiryController.deleteEnqure);
+
 module.exports = router;
