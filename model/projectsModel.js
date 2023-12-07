@@ -49,13 +49,18 @@ const projectSchema = new mongoose.Schema(
       require: [true, "Developer Name is Required"],
     },
 
-    ProjectCity: {
+    cityName: {
       type: String,
       require: [true, "Project Location Name is Required"],
     },
-    ProjectSector: {
+    locationName: {
       type: String,
       require: [true, "Project Location Name is Required"],
+    },
+
+    address: {
+      type: String,
+      require: [true, "Project Address is Required"],
     },
 
     Budget: {

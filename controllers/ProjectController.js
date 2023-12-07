@@ -44,8 +44,8 @@ exports.allProjects = catchAsync(async (req, res, next) => {
     properties = await Project.find({
       $or: [
         { projectName: { $regex: decodedSearch, $options: "i" } },
-        { ProjectCity: { $regex: decodedSearch, $options: "i" } },
-        { ProjectSector: { $regex: decodedSearch, $options: "i" } },
+        { cityName: { $regex: decodedSearch, $options: "i" } },
+        { locationName: { $regex: decodedSearch, $options: "i" } },
       ],
     });
   } else {
@@ -59,13 +59,15 @@ exports.allProjects = catchAsync(async (req, res, next) => {
 exports.createNewProject = catchAsync(async (req, res, next) => {
   const {
     projectName,
-    ProjectSector,
-    ProjectCity,
+    locationName,
+    cityName,
     UnitType,
     Budget,
     developer,
     BasicPrice,
     FlatSizeRange,
+    RERANo,
+    address,
   } = req.body;
 
   let thumblin;
@@ -78,13 +80,15 @@ exports.createNewProject = catchAsync(async (req, res, next) => {
 
   const newProject = new Project({
     projectName,
-    ProjectSector,
-    ProjectCity,
+    locationName,
+    cityName,
     Budget,
     UnitType,
     FlatSizeRange,
     BasicPrice,
     developer,
+    RERANo,
+    address,
     ProjectThumblin: {
       url: thumblin,
       altText: projectName,

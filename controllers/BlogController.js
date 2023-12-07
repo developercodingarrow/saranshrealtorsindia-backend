@@ -68,9 +68,10 @@ exports.singleBlog = catchAsync(async (req, res, next) => {
 
 // Delete Single Blog
 exports.deleteSingleBlog = catchAsync(async (req, res) => {
-  const { id } = req.body;
+  const { _id } = req.body;
+  console.log(_id);
 
-  const deleteBlog = await Blog.findByIdAndDelete(id);
+  const deleteBlog = await Blog.findByIdAndDelete(_id);
 
   resultStatus(res, 404, "delete blog sucesfully", deleteBlog);
 });
