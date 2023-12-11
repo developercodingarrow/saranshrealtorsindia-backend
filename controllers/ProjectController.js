@@ -55,6 +55,10 @@ exports.allProjects = catchAsync(async (req, res, next) => {
   resultStatus(res, 200, "fetch all projects", properties);
 });
 
+exports.featureProjects = catchAsync(async (req, res, next) => {
+  const data = await Project.find({ Featured: true });
+});
+
 // Create a new Project
 exports.createNewProject = catchAsync(async (req, res, next) => {
   const {

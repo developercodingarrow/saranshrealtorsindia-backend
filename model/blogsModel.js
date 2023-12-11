@@ -29,6 +29,11 @@ const blogSchema = new mongoose.Schema({
       },
     },
   ],
+
+  createAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 // slug the pormotional page Title
