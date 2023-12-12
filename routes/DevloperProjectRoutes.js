@@ -10,16 +10,19 @@ router.post(
 
 // GET ALL DEVELOPER PROJECT PAGE LIST
 router.get(
-    "/get-all-developer-Project-List-pages",
-    DevelopProjectController.allDeveloperProjectList
-  );
+  "/get-all-developer-Project-List-pages",
+  DevelopProjectController.allDeveloperProjectList
+);
 
-// GET projes by developer 
+// GET projes by developer
 router.get(
-    "/get-developer-projects/:slug",
-    DevelopProjectController.developerProjectPage
-  );
+  "/get-developer-projects/:slug",
+  DevelopProjectController.developerProjectPage
+);
 
-
+router.delete(
+  "/delete-pormotional-page",
+  DevelopProjectController.deletePormotionalPage
+);
 
 module.exports = router;

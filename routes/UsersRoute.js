@@ -4,6 +4,7 @@ const UserController = require("../controllers/UserController");
 
 router.post("/super-admin-register", UserController.superAdminRegister);
 router.post("/super-admin-login", UserController.loginSuperAdmin);
+router.post("/admin-login", UserController.loginAdmin);
 
 // Create admins -By Supr Admin
 router.post(

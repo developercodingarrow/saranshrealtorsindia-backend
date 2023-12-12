@@ -1,25 +1,23 @@
-
 const LocationProjects = require("../model/locationProjectsModel");
 const Project = require("../model/projectsModel");
 const catchAsync = require("../utils/catchAsync");
 
-
 // One Result status Function
 const resultStatus = (res, statusCode, msg, result) => {
-    res.status(statusCode).json({
-      status: "Success",
-      message: msg,
-      result,
-    });
-  };
+  res.status(statusCode).json({
+    status: "Success",
+    message: msg,
+    result,
+  });
+};
 
 // Projects by Loaction
-exports.createLocationProjectPage = catchAsync(async (req,res,next)=>{
-    const { pageTitle, ProjectCity, topDescription, bottomDescription } =
+exports.createLocationProjectPage = catchAsync(async (req, res, next) => {
+  const { pageTitle, locationName, topDescription, bottomDescription } =
     req.body;
   const newLocationProjectPage = new LocationProjects({
     pageTitle,
-    ProjectCity,
+    locationName,
     topDescription,
     bottomDescription,
   });
@@ -30,26 +28,33 @@ exports.createLocationProjectPage = catchAsync(async (req,res,next)=>{
     "created new Location Project page",
     saveNewLocationProject
   );
-  })
-  
-  // Get All Location Project Page
-  exports.allLocationProjectList = catchAsync(async (req, res, next) => {
-    const LocationPage = await LocationProjects.find();
-    resultStatus(res, 200, "all Developer pages", LocationPage);
+});
+
+// Get All Location Project Page
+exports.allLocationProjectList = catchAsync(async (req, res, next) => {
+  const LocationPage = await LocationProjects.find();
+  resultStatus(res, 200, "all Developer pages", LocationPage);
+});
+
+// GET PROJECTS BY Location
+exports.locationProjectPage = catchAsync(async (req, res, next) => {
+  const { slug } = req.params;
+  // GET Project By Location
+  const getlocation = await LocationProjects.findOne({ slug });
+  console.log(getlocation.locationName);
+  const projects = await Project.find({
+    locationName: getlocation.locationName,
   });
-  
-  // GET PROJECTS BY Location  
-  exports.locationProjectPage = catchAsync(async (req, res, next)=>{
-    const { slug } = req.params;
-    // GET Project By Location 
-    const getlocation = await LocationProjects.findOne({slug});
-    console.log(getlocation.ProjectCity)
-    const projects = await Project.find({
-       ProjectSector: getlocation.ProjectCity,
-      });
-      res.status(200).json({
-        location: getlocation.ProjectCity,
-        status: "Success",
-        projects,
-      });
-  }) 
+  res.status(200).json({
+    location: getlocation.locationName,
+    status: "Success",
+    projects,
+  });
+});
+
+exports.deleteLocationPage = catchAsync(async (req, res, next) => {
+  const { _id } = req.body;
+  console.log(_id);
+  const data = await LocationProjects.findByIdAndDelete(_id);
+  resultStatus(res, 200, "DELETE DEVELOPER Deleted", data);
+});

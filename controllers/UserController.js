@@ -50,8 +50,35 @@ exports.loginSuperAdmin = catchAsync(async (req, res, next) => {
   const token = signToken(user._id);
   res.status(200).json({
     status: "Success",
-    message: "Super Admin Login sucessfully",
+    message: "Login sucessfully",
     apiFor: "Login",
+    token,
+    user,
+  });
+});
+
+// Login Admin
+exports.loginAdmin = catchAsync(async (req, res, next) => {
+  const { userName, password } = req.body;
+  console.log(userName, password);
+  // 1) Check E-mail and password is exist
+  if (!userName || !password) {
+    return next(new APPError("please provide E-mail and Password "));
+  }
+  // 2) check user is exist in
+  const user = await Users.findOne({ userName }).select("+password");
+  // 3) Password Verification
+  if (!user || !(await user.correctPassword(password, user.password))) {
+    return next(
+      new AppError("Please enter the valid user Nmae or password ", 401)
+    );
+  }
+
+  const token = signToken(user._id);
+  res.status(200).json({
+    status: "Success",
+    message: "Login sucessfully",
+    apiFor: "admin-login",
     token,
     user,
   });
@@ -60,14 +87,11 @@ exports.loginSuperAdmin = catchAsync(async (req, res, next) => {
 // Create New Admin
 exports.createAdmin = catchAsync(async (req, res, next) => {
   const name = req.body.name;
-  const email = req.body.email;
   const password = req.body.password;
-  const passwordConfirm = req.body.password;
   const userName = req.body.userName;
 
   const newUser = await Users.create({
     name,
-    email,
     password,
     userName,
     role: "admin",
@@ -226,8 +250,6 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   }
 
-  // 4) check if user change password after the token was issued
-  // skip this step there is no need to this
   req.user = fresUser;
 
   next();

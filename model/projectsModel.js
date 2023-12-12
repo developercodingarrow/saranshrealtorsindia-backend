@@ -124,6 +124,11 @@ projectSchema.pre("save", function (next) {
   this.slug = slugify(this.projectName, {
     lower: false,
   });
+
+  // Convert developer name to lowercase before saving
+  if (this.developer && typeof this.developer === "string") {
+    this.developer = this.developer.toLowerCase();
+  }
   next();
 });
 

@@ -21,7 +21,7 @@ router.delete(
   "/delete-multiple-project",
   ProjectController.deleteMultipleProjects
 );
-router.post("/update-upcoming-project", ProjectController.upcomingProjects);
+router.patch("/update-upcoming-project", ProjectController.upcomingProjects);
 router.patch("/update-feature-project", ProjectController.toggleFeatureProject);
 router.patch("/update-project-status", ProjectController.toggleProjectStatus);
 router.patch(

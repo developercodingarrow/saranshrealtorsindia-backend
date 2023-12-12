@@ -34,3 +34,5 @@ exports.deleteDeveloper = catchAsync(async (req, res, next) => {
   const deleteDeveloper = await Developer.findByIdAndDelete(_id);
   resultStatus(res, 200, "Developer Deleted", deleteDeveloper);
 });
+
+

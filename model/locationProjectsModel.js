@@ -14,7 +14,7 @@ const locationProjectSchema = new mongoose.Schema({
     unique: true,
   },
 
-  ProjectCity: {
+  locationName: {
     type: String,
   },
 
