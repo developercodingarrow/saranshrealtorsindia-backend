@@ -35,4 +35,9 @@ router.patch(
   ProjectController.updateThumblinIMage
 );
 
+router.get(
+  "/get-single-project-for-update/:_id",
+  ProjectController.getSingleProjectForUpdate
+);
+
 module.exports = router;

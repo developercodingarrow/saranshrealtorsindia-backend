@@ -261,3 +261,20 @@ exports.getSingleProject = catchAsync(async (req, res, next) => {
     project,
   });
 });
+
+exports.getSingleProjectForUpdate = catchAsync(async (req, res, next) => {
+  const { _id } = req.params;
+  const data = await Project.findById(_id);
+  if (!data) {
+    return res.status(404).json({
+      status: "Error",
+      message: "Project not found",
+    });
+  }
+
+  return res.status(200).json({
+    status: "Success",
+    message: "Single Project fetch Succesfully",
+    data,
+  });
+});
