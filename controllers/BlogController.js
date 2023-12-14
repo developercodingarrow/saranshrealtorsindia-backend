@@ -2,6 +2,7 @@ const catchAsync = require("../utils/catchAsync");
 const Blog = require("../model/blogsModel");
 const multer = require("multer");
 const path = require("path");
+const AppError = require("../utils/appErrors");
 
 // Multer
 
@@ -33,6 +34,7 @@ const resultStatus = (res, statusCode, msg, result) => {
 // get All blogs
 exports.allBlogs = catchAsync(async (req, res) => {
   const blogs = await Blog.find();
+
   resultStatus(res, 200, "fetch all Blogs", blogs);
 });
 
@@ -59,9 +61,12 @@ exports.createNewBlog = catchAsync(async (req, res) => {
 
 exports.singleBlog = catchAsync(async (req, res, next) => {
   const { slug } = req.params;
-  console.log(slug);
 
   const blog = await Blog.findOne({ slug });
+
+  if (!blog) {
+    return next(new AppError("This Blog is Not Found", 404));
+  }
 
   resultStatus(res, 200, "single blog fetch", blog);
 });
@@ -69,9 +74,11 @@ exports.singleBlog = catchAsync(async (req, res, next) => {
 // Delete Single Blog
 exports.deleteSingleBlog = catchAsync(async (req, res) => {
   const { _id } = req.body;
-  console.log(_id);
-
   const deleteBlog = await Blog.findByIdAndDelete(_id);
+
+  if (!deleteBlog) {
+    return next(new AppError("This Blog is Not Found", 404));
+  }
 
   resultStatus(res, 404, "delete blog sucesfully", deleteBlog);
 });

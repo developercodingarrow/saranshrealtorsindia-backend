@@ -32,7 +32,7 @@ app.use("/city", CityRoute);
 app.use("/location", LocationRoute);
 
 app.all("*", (req, res, next) => {
-  next(new AppError("this is error message ", 404));
+  return next(new AppError("This Route is not awalible", 404));
 });
 
 app.use(globalErrorHandler);

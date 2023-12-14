@@ -1,4 +1,5 @@
 const Project = require("../model/projectsModel");
+const AppError = require("../utils/appErrors");
 const catchAsync = require("../utils/catchAsync");
 const multer = require("multer");
 const path = require("path");
@@ -264,13 +265,9 @@ exports.getSingleProject = catchAsync(async (req, res, next) => {
 
 exports.getSingleProjectForUpdate = catchAsync(async (req, res, next) => {
   const { _id } = req.params;
-  console.log(_id);
   const data = await Project.findById(_id);
   if (!data) {
-    return res.status(404).json({
-      status: "Error",
-      message: "Project not found",
-    });
+    return next(new AppError("data is invalid", 404));
   }
 
   return res.status(200).json({
