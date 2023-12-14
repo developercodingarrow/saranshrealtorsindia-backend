@@ -6,6 +6,11 @@ const handelCastErrorDB = (err) => {
   return new AppError(message, 400);
 };
 
+const handelDuplicate = (err) => {
+  const message = `Duplicate Filed value please use anoth name`;
+  return new AppError(message, 400);
+};
+
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
     status: err.status,
@@ -41,9 +46,14 @@ module.exports = (err, req, res, next) => {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === "production") {
     let error = { ...err };
+    if (error.code === 11000) {
+      console.log("run");
+      error = handelDuplicate(error);
+    }
     if (error.path === "_id") {
       error = handelCastErrorDB(error);
     }
+
     sendErrorPro(error, res);
   }
 };
