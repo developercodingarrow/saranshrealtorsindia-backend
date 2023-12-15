@@ -4,7 +4,8 @@
   "description": "Saransh India Merrn website",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "start": " node server.js "
   },
   "author": "sandeep",
   "license": "ISC",
