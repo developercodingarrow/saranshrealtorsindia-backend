@@ -35,6 +35,17 @@ router.patch(
   ProjectController.updateThumblinIMage
 );
 
+router.patch(
+  "/update-project-cover-image/:id",
+  ProjectController.multerProjectCoverImage,
+  ProjectController.updateCoverImage
+);
+
+router.patch(
+  "/update-floor-plan-image",
+  ProjectController.updateFloorPlanImages
+);
+
 router.get(
   "/get-single-project-for-update/:_id",
   ProjectController.getSingleProjectForUpdate

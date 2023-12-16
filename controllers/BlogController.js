@@ -41,7 +41,6 @@ exports.allBlogs = catchAsync(async (req, res) => {
 // Create new Blog
 exports.createNewBlog = catchAsync(async (req, res) => {
   const { blogTitle, blogDescreption } = req.body;
-  console.log(req.body);
   const image = req.file.filename;
 
   const newBlog = new Blog({

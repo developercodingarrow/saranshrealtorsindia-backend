@@ -115,6 +115,32 @@ const projectSchema = new mongoose.Schema(
         },
       },
     ],
+
+    ProjectCoverImage: [
+      {
+        url: {
+          type: String,
+          default: "project-dummy-image.jpg",
+        },
+        altText: {
+          type: String,
+          default: "project-cover-image",
+        },
+      },
+    ],
+
+    floorPlanImages: [
+      {
+        url: {
+          type: String,
+          default: "floor-plan-dummy-image.jpg",
+        },
+        altText: {
+          type: String,
+          default: "floor-plan-image",
+        },
+      },
+    ],
   },
   { timestamps: true }
 );
@@ -128,6 +154,16 @@ projectSchema.pre("save", function (next) {
   // Convert developer name to lowercase before saving
   if (this.developer && typeof this.developer === "string") {
     this.developer = this.developer.toLowerCase();
+  }
+  next();
+});
+
+projectSchema.pre("save", function (next) {
+  if (!this.ProjectCoverImage || this.ProjectCoverImage.length === 0) {
+    this.ProjectCoverImage.push({
+      url: "project-dummy-image.jpg",
+      altText: "Default Image Alt Text",
+    });
   }
   next();
 });

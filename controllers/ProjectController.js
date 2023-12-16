@@ -3,7 +3,6 @@ const AppError = require("../utils/appErrors");
 const catchAsync = require("../utils/catchAsync");
 const multer = require("multer");
 const path = require("path");
-// const test = require("../../client/public/project-feature-images");
 
 // Project Image Upload
 const multerstorage = multer.diskStorage({
@@ -19,11 +18,48 @@ const multerstorage = multer.diskStorage({
   },
 });
 
+const Covermulterstorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(
+      null,
+      path.resolve(`${__dirname}/../../client/public/project-cover-image`)
+    );
+  },
+  filename: function (req, file, cb) {
+    const ext = file.mimetype.split("/")[1];
+    cb(null, `project-cover-image-${req.user._id}-${Date.now()}.${ext}`);
+  },
+});
+
 const upload = multer({
   storage: multerstorage,
 });
 
-exports.ProjectThumblinImage = upload.single("ProjectThumblin");
+const Coverupload = multer({
+  storage: Covermulterstorage,
+});
+
+// exports.ProjectThumblinImage = upload.single("ProjectThumblin");
+
+exports.ProjectThumblinImage = (req, res, next) => {
+  upload.single("ProjectThumblin")(req, res, (err) => {
+    if (err) {
+      console.error("Multer Error:", err); // Log any multer-related errors
+      return res.status(400).send("File upload error");
+    }
+    next();
+  });
+};
+
+exports.multerProjectCoverImage = (req, res, next) => {
+  Coverupload.single("ProjectCoverImage")(req, res, (err) => {
+    if (err) {
+      console.error("Multer Error:", err); // Log any multer-related errors
+      return res.status(400).send("File upload error");
+    }
+    next();
+  });
+};
 
 // One Result status Function
 const resultStatus = (res, statusCode, msg, result) => {
@@ -62,6 +98,8 @@ exports.featureProjects = catchAsync(async (req, res, next) => {
 
 // Create a new Project
 exports.createNewProject = catchAsync(async (req, res, next) => {
+  console.log("run");
+
   const {
     projectName,
     locationName,
@@ -75,11 +113,9 @@ exports.createNewProject = catchAsync(async (req, res, next) => {
     address,
   } = req.body;
 
-  let thumblin;
+  let thumblin = "project-dummy-image.jpg";
 
-  if (!req.file?.filename) {
-    thumblin = "project-dummy-image.jpg";
-  } else {
+  if (req.file?.filename) {
     thumblin = req.file.filename;
   }
 
@@ -104,13 +140,8 @@ exports.createNewProject = catchAsync(async (req, res, next) => {
 });
 
 exports.updateThumblinIMage = catchAsync(async (req, res, next) => {
-  console.log("run-1");
   const { id } = req.params;
-  console.log(id);
-  console.log("run-2");
   const thumblin = req.file.filename;
-  console.log(thumblin);
-  console.log("run-3");
   const upadteThumblin = await Project.findByIdAndUpdate(
     id,
     {
@@ -126,6 +157,52 @@ exports.updateThumblinIMage = catchAsync(async (req, res, next) => {
     status: "Success",
     message: "Project Thumblin Update Succesfully",
     upadteThumblin,
+  });
+});
+
+exports.updateCoverImage = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const coverImage = req.file.filename;
+
+  const upadteCover = await Project.findByIdAndUpdate(
+    id,
+    {
+      ProjectCoverImage: {
+        url: coverImage,
+        altText: "update-new-image",
+      },
+    },
+    { new: true }
+  );
+
+  return res.status(200).json({
+    status: "Success",
+    message: "Project Cover image Update Succesfully",
+    upadteCover,
+  });
+});
+
+exports.updateFloorPlanImages = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const files = req.files; // Assuming multer stores multiple files in req.files
+
+  const images = files.map((file) => ({
+    url: file.filename,
+    altText: "update-new-image", // Set alt text as needed
+  }));
+
+  const floorPlans = await Project.findByIdAndUpdate(
+    id,
+    {
+      $push: { floorPlanImages: { $each: images } }, // Use $push with $each to add multiple images to the array
+    },
+    { new: true }
+  );
+
+  return res.status(200).json({
+    status: "Success",
+    message: "Project Thumblin Update Succesfully",
+    floorPlans,
   });
 });
 
