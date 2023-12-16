@@ -42,7 +42,8 @@ router.patch(
 );
 
 router.patch(
-  "/update-floor-plan-image",
+  "/update-floor-plan-image/:id",
+  ProjectController.floorPlanImages,
   ProjectController.updateFloorPlanImages
 );
 

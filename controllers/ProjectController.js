@@ -31,6 +31,16 @@ const Covermulterstorage = multer.diskStorage({
   },
 });
 
+const floorPlanmulterstorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.resolve(`${__dirname}/../../client/public/Floor-Plan`));
+  },
+  filename: function (req, file, cb) {
+    const ext = file.mimetype.split("/")[1];
+    cb(null, `Floor-Plan-${req.user._id}-${Date.now()}.${ext}`);
+  },
+});
+
 const upload = multer({
   storage: multerstorage,
 });
@@ -38,6 +48,8 @@ const upload = multer({
 const Coverupload = multer({
   storage: Covermulterstorage,
 });
+
+const floorPlanupload = multer({ storage: floorPlanmulterstorage });
 
 // exports.ProjectThumblinImage = upload.single("ProjectThumblin");
 
@@ -56,6 +68,21 @@ exports.multerProjectCoverImage = (req, res, next) => {
     if (err) {
       console.error("Multer Error:", err); // Log any multer-related errors
       return res.status(400).send("File upload error");
+    }
+    next();
+  });
+};
+
+exports.floorPlanImages = (req, res, next) => {
+  floorPlanupload.array("floorPlanImages", 4)(req, res, (err) => {
+    if (err instanceof multer.MulterError) {
+      // Multer error handling
+      console.error("Multer Error:", err);
+      return res.status(400).send("File upload error");
+    } else if (err) {
+      // Other errors
+      console.error("Error:", err);
+      return res.status(500).send("Something went wrong");
     }
     next();
   });
