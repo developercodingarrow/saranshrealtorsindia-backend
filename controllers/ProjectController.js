@@ -209,54 +209,55 @@ exports.updateCoverImage = catchAsync(async (req, res, next) => {
   });
 });
 
-// exports.updateFloorPlanImages = catchAsync(async (req, res, next) => {
-//   const { id } = req.params;
-//   const files = req.files;
-//   const images = files.map((file) => ({
-//     url: file.filename,
-//     altText: "update-new-image",
-//   }));
-//   const floorPlans = await Project.findByIdAndUpdate(
-//     id,
-//     {
-//       $push: { floorPlanImages: { $each: images } }, // Use $push with $each to add multiple images to the array
-//     },
-//     { new: true }
-//   );
-
-//   return res.status(200).json({
-//     status: "Success",
-//     message: "Project Floor plan image Update Succesfully",
-//     floorPlans,
-//   });
-// });
-
 exports.updateFloorPlanImages = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   const files = req.files;
-
-  // Fetch the existing project by ID
-  const existingProject = await Project.findById(id);
-
-  // Clear existing floorPlanImages for the project
-  existingProject.floorPlanImages = [];
-
-  // Map the files to create the new images
   const images = files.map((file) => ({
     url: file.filename,
     altText: "update-new-image",
   }));
-
-  // Update the project with new floorPlanImages
-  existingProject.floorPlanImages.push(...images);
-  await existingProject.save();
+  const floorPlans = await Project.findByIdAndUpdate(
+    id,
+    {
+      $push: { floorPlanImages: { $each: images } }, // Use $push with $each to add multiple images to the array
+    },
+    { new: true }
+  );
 
   return res.status(200).json({
     status: "Success",
-    message: "Project floor plan images updated successfully",
-    floorPlans: existingProject.floorPlanImages,
+    message: "Project Floor plan image Update Succesfully",
+    floorPlans,
   });
 });
+
+// Delete the previous image
+// exports.updateFloorPlanImages = catchAsync(async (req, res, next) => {
+//   const { id } = req.params;
+//   const files = req.files;
+
+//   // Fetch the existing project by ID
+//   const existingProject = await Project.findById(id);
+
+//   // Clear existing floorPlanImages for the project
+//   existingProject.floorPlanImages = [];
+
+//   // Map the files to create the new images
+//   const images = files.map((file) => ({
+//     url: file.filename,
+//     altText: "update-new-image",
+//   }));
+
+//   // Update the project with new floorPlanImages
+//   existingProject.floorPlanImages.push(...images);
+//   await existingProject.save();
+
+//   return res.status(200).json({
+//     status: "Success",
+//     message: "Project floor plan images updated successfully",
+//     floorPlans: existingProject.floorPlanImages,
+//   });
+// });
 
 // Delete Single Project
 exports.deleteSinglProject = catchAsync(async (req, res, next) => {
