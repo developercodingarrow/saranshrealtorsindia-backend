@@ -52,4 +52,14 @@ router.get(
   ProjectController.getSingleProjectForUpdate
 );
 
+router.get(
+  "/project-floor-plan-images/:_id",
+  ProjectController.getprojectFloorImage
+);
+
+router.delete(
+  "/delete-project-floor-plan-image/:_id",
+  ProjectController.deleteProjectFloorPlanImage
+);
+
 module.exports = router;
